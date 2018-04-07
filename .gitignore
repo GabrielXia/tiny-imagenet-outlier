@@ -1,0 +1,5 @@
+tiny-imagenet-200/
+*.ipynb_checkpoints
+*.pyc
+.idea/
+.DS_Store
