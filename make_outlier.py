@@ -30,7 +30,8 @@ def read_table(image_dir, ratio=0.1):
     map = {}
     r = float(ratio)
     for type in os.listdir(image_dir):
-        with open(image_dir + type + '/' + type + '_outlier_' + str(r) + '.csv', 'rb') as csvfile:
+
+        with open(image_dir + '/' + type + '/' + type + '_outlier_' + str(r) + '.csv', 'rb') as csvfile:
             spamwriter = csv.reader(csvfile, delimiter=',',
                         quotechar='|', quoting=csv.QUOTE_MINIMAL)
             for row in spamwriter:

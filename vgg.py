@@ -43,7 +43,7 @@ parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum')
 parser.add_argument('--weight-decay', '--wd', default=1e-4, type=float,
                     metavar='W', help='weight decay (default: 1e-4)')
-parser.add_argument('--print-freq', '-p', default=10, type=int,
+parser.add_argument('--print-freq', '-p', default=100, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
@@ -58,7 +58,8 @@ parser.add_argument('--dist-url', default='tcp://224.66.41.62:23456', type=str,
 parser.add_argument('--dist-backend', default='gloo', type=str,
                     help='distributed backend')
 
-parser.add_argument('-ratio', type=float, help="the outlier ratio")
+parser.add_argument('--ratio', default=0.1, type=float, help="the outlier ratio")
+parser.add_argument('--nc', default=200, type=int, help="number of class")
 
 best_prec1 = 0
 
@@ -79,7 +80,7 @@ def main():
         model = models.__dict__[args.arch](pretrained=True)
     else:
         print("=> creating model '{}'".format(args.arch))
-        model = models.__dict__[args.arch]()
+        model = models.__dict__[args.arch](num_classes=args.nc)
 
     if not args.distributed:
         if args.arch.startswith('alexnet') or args.arch.startswith('vgg'):
@@ -121,7 +122,7 @@ def main():
                                      std=[0.229, 0.224, 0.225])
 
     train_dataset = ImagenetTinyOutlier(
-        traindir, 0,
+        traindir, args.ratio,
         transforms.Compose([
             transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
