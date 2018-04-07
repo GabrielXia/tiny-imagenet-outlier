@@ -29,7 +29,7 @@ class ImagenetTinyOutlier(datasets.ImageFolder):
         super(ImagenetTinyOutlier, self).__init__(root, transform, target_transform, loader)
         self.ratio = ratio
         self.root = root
-        map = read_table(root)
+        map = read_table(root, ratio=self.ratio)
         self.samples = make_dataset(root, self.class_to_idx, map)
         self.imgs = self.samples
 
